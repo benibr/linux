@@ -674,6 +674,7 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
 	generate_random_guid(root_item->uuid);
 	btrfs_set_stack_timespec_sec(&root_item->otime, cur_time.tv_sec);
 	btrfs_set_stack_timespec_nsec(&root_item->otime, cur_time.tv_nsec);
+	//fixme: here might dtime right
 	root_item->ctime = root_item->otime;
 	btrfs_set_root_ctransid(root_item, trans->transid);
 	btrfs_set_root_otransid(root_item, trans->transid);
