@@ -676,8 +676,7 @@ struct btrfs_root_item {
 	struct btrfs_timespec stime;
 	struct btrfs_timespec rtime;
 	struct btrfs_timespec dtime;
-	__le32 stub; 
-	__le64 reserved[6]; /* for future */
+	__le32 reserved[13]; /* for future */
 } __attribute__ ((__packed__));
 
 /*
