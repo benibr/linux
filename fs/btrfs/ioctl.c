@@ -674,7 +674,8 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
 	generate_random_guid(root_item->uuid);
 	btrfs_set_stack_timespec_sec(&root_item->otime, cur_time.tv_sec);
 	btrfs_set_stack_timespec_nsec(&root_item->otime, cur_time.tv_nsec);
-	//fixme: here might dtime right
+	btrfs_set_stack_timespec_sec(&root_item->dtime, cur_time.tv_sec);
+	btrfs_set_stack_timespec_nsec(&root_item->dtime, cur_time.tv_nsec);
 	root_item->ctime = root_item->otime;
 	btrfs_set_root_ctransid(root_item, trans->transid);
 	btrfs_set_root_otransid(root_item, trans->transid);
@@ -3067,6 +3068,7 @@ static int btrfs_ioctl_get_subvol_info(struct inode *inode, void __user *argp)
 	subvol_info->rtime.nsec = btrfs_stack_timespec_nsec(&root_item->rtime);
 
 	subvol_info->dtime.sec = btrfs_stack_timespec_sec(&root_item->dtime);
+	subvol_info->rtime.nsec = btrfs_stack_timespec_nsec(&root_item->dtime);
 
 	if (key.objectid != BTRFS_FS_TREE_OBJECTID) {
 		/* Search root tree for ROOT_BACKREF of this subvolume */
