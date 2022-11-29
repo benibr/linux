@@ -164,6 +164,7 @@ struct btrfs_pending_snapshot {
 	/* Preallocated anonymous block device number */
 	dev_t anon_dev;
 	bool readonly;
+	//fixme: maybe insert date here
 	struct list_head list;
 };
 

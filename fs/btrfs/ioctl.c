@@ -68,6 +68,7 @@ struct btrfs_ioctl_received_subvol_args_32 {
 	__u64	rtransid;		/* out */
 	struct btrfs_ioctl_timespec_32 stime; /* in */
 	struct btrfs_ioctl_timespec_32 rtime; /* out */
+	struct btrfs_ioctl_timespec_32 dtime; /* out */
 	__u64	flags;			/* in */
 	__u64	reserved[16];		/* in */
 } __attribute__ ((__packed__));
@@ -821,6 +822,7 @@ static int create_snapshot(struct btrfs_root *root, struct inode *dir,
 	pending_snapshot->dentry = dentry;
 	pending_snapshot->root = root;
 	pending_snapshot->readonly = readonly;
+	//fixme: here we might set the expiration
 	pending_snapshot->dir = dir;
 	pending_snapshot->inherit = inherit;
 
@@ -3068,7 +3070,7 @@ static int btrfs_ioctl_get_subvol_info(struct inode *inode, void __user *argp)
 	subvol_info->rtime.nsec = btrfs_stack_timespec_nsec(&root_item->rtime);
 
 	subvol_info->dtime.sec = btrfs_stack_timespec_sec(&root_item->dtime);
-	subvol_info->rtime.nsec = btrfs_stack_timespec_nsec(&root_item->dtime);
+	subvol_info->dtime.nsec = btrfs_stack_timespec_nsec(&root_item->dtime);
 
 	if (key.objectid != BTRFS_FS_TREE_OBJECTID) {
 		/* Search root tree for ROOT_BACKREF of this subvolume */
@@ -4868,6 +4870,9 @@ static long _btrfs_ioctl_set_received_subvol(struct file *file,
 	btrfs_set_stack_timespec_nsec(&root_item->stime, sa->stime.nsec);
 	btrfs_set_stack_timespec_sec(&root_item->rtime, sa->rtime.sec);
 	btrfs_set_stack_timespec_nsec(&root_item->rtime, sa->rtime.nsec);
+	// fixme: where should dtime come from
+	btrfs_set_stack_timespec_sec(&root_item->dtime, sa->dtime.sec);
+	btrfs_set_stack_timespec_nsec(&root_item->dtime, sa->dtime.nsec);
 
 	ret = btrfs_update_root(trans, fs_info->tree_root,
 				&root->root_key, &root->root_item);
