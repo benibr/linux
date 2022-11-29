@@ -756,8 +756,7 @@ struct btrfs_ioctl_received_subvol_args {
 	struct btrfs_ioctl_timespec rtime; /* out */
 	struct btrfs_ioctl_timespec dtime; /* expire */
 	__u64	flags;			/* in */
-	__u32	reserved32[1];		/* in */
-	__u64	reserved[13];		/* in */
+	__u32	reserved32[29];		/* in */
 };
 
 /*
